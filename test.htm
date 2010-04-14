@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <title>trigger.js test page</title>
+    <script type='text/javascript' src='trigger.js'></script>
+    <script type='text/javascript'>
+      var myArray = [];
+      var otherArray = [];
+    
+      function init() {
+        append('ready for action...');
+        
+        trigger.observeType(Array, function() {
+          append("Array observed");
+        });
+        
+        trigger.observeType(String, function() {
+          append("String observed, shouldn't see me");
+        });
+        
+        trigger.observeObject(myArray, function() {
+          append("myArray instance observed");
+        });
+        
+        trigger.observeObject(otherArray, function() {
+          append("otherArray instance observed, shouldn't see me");
+        });
+        
+        trigger.observeEvent('foo.bar.baz', function() {
+          append("foo.bar.baz observed");
+        });
+        
+        trigger.observeEvent('foo.?.baz', function() {
+          append("foo.?.baz observed");
+        });
+        
+        trigger.observeEvent('foo.?.*', function() {
+          append("foo.?.* observed");
+        });
+        
+        trigger.observeEvent('foo.*.*', function() {
+          append("foo.*.* observed");
+        });
+        
+        trigger.observeEvent('foo.?.?', function() {
+          append("foo.?.? observed");
+        });
+        
+        trigger.observeEvent('foo.*', function() {
+          append("foo.* observed");
+        });
+        
+        trigger.observeEvent('*', function() {
+          append("* observed");
+        });
+        
+        trigger.observeEvent('foo', function() {
+          append("foo observed, shouldn't see me");
+        });
+        
+        trigger.observeEvent('foo.bar', function() {
+          append("foo.bar observed, shouldn't see me");
+        });
+        
+        trigger.observeEvent('foo.bar.bleem', function() {
+          append("foo.bar.bleem observed, shouldn't see me");
+        });
+        
+        trigger.registerFilter('filterTest', function(val) { return val.toUpperCase(); });
+        trigger.registerFilter('filterTest', function(val) { return val.substr(0, 5); });
+        
+        Trigger.mixin(myArray);
+      
+      }
+      
+      function fire() {
+        myArray.fire("foo.bar.baz", {extra: "some extra data"});
+      }
+      
+      function filter() {
+        var input = "foobarbaz";
+        append("input is: " + input);
+        var output = trigger.filter('filterTest', input);
+        append("output is: " + output);
+      }
+      
+      function append(text) {
+        var ele = document.getElementById('output');
+        ele.appendChild(document.createTextNode(text));
+        ele.appendChild(document.createElement('br'));
+      }
+    </script>
+  </head>
+  <body onload='init();'>
+    <button onclick='fire();'>Fire event</button>
+    <button onclick='filter();'>Filter value</button>
+    <div id='output'>
+      
+    </div>
+  </body>
+</html>
