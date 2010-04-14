@@ -27,21 +27,21 @@
     }
     
     function EventObject(source, name, args) {
-	    this.source = source;
-	    this.name = name;
-	    this.args = args || {};
-	    this.handled = false;
-	};
-	
-	EventObject.prototype.handled = function() { this.handled = true; }
-	EventObject.prototype.isHandled = function() { return this.handled; }
+        this.source = source;
+        this.name = name;
+        this.args = args || {};
+        this.handled = false;
+    };
     
-	function Trigger() {
+    EventObject.prototype.handled = function() { this.handled = true; }
+    EventObject.prototype.isHandled = function() { return this.handled; }
+    
+    function Trigger() {
         this.events = [];
         this.filters = [];
-	}
-	
-	Trigger.prototype = {
+    }
+    
+    Trigger.prototype = {
         registerEventHandler: function(sourceType, source, eventName, callback) {
             var handler = new Rule(sourceType, source, eventName, callback);
             this.events.push(handler);
@@ -80,19 +80,19 @@
             }
             return args;
         }
-	}
-	
-	Trigger.mixin = function(object, trigger) {
-	    trigger = trigger || context.trigger;
-	    object.fire = function(event, args) {
-	        trigger.fire(this, event, args || {});
-	    }
-	    object.filter = function(filter, args) {
-	        return trigger.filter(filter, args || {});
-	    }
-	}
-	
-	context.Trigger = Trigger;
-	context.trigger = new Trigger();
-	
+    }
+    
+    Trigger.mixin = function(object, trigger) {
+        trigger = trigger || context.trigger;
+        object.fire = function(event, args) {
+            trigger.fire(this, event, args || {});
+        }
+        object.filter = function(filter, args) {
+            return trigger.filter(filter, args || {});
+        }
+    }
+    
+    context.Trigger = Trigger;
+    context.trigger = new Trigger();
+    
 })(this);
