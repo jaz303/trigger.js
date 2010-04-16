@@ -8,8 +8,7 @@
             name = name.replace(/\?/g, '[a-z0-9_-]+')
                        .replace(/\*/g, '[a-z0-9_-]+(.[a-z0-9_-]+)*')
                        .replace(/\./g, '\\.');
-            name = '^' + name + '$';
-            name = new RegExp(name, 'i');
+            name = new RegExp('^' + name + '$', 'i');
         }
         this.name = name;
         this.callback = callback;
